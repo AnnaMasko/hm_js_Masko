@@ -40,9 +40,17 @@ function createToDo() {
     )
 
     textSpan.addEventListener("click", () => {
-        textSpan.innerHTML = "";
-        textSpan.append(prompt('Измени задачу'));
-        ul.appendChild(li).append(chekbox, textSpan);
+        const change = prompt('Измени задачу');
+        console.log(change);
+        if (change !== "")
+        {
+            textSpan.append(change);
+            textSpan.innerHTML = "";
+            ul.appendChild(li).append(chekbox, textSpan);
+        }
+        else alert('Задача не будет изменена');
+
+        
     }
     )
 }
