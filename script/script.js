@@ -58,7 +58,6 @@ function createToDo() {
 
 clearButton.addEventListener("click", () => {
     ul.innerHTML = "";
-    localStorage.removeItem('todos', ul.innerHTML);
 });
 
 
