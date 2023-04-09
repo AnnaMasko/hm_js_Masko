@@ -206,4 +206,4 @@ class ContactApp extends Contacts {
 
 
 const contactApp = new ContactApp();
-contactApp.onAdd();
+//contactApp.onAdd();
