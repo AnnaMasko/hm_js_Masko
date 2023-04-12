@@ -79,7 +79,6 @@ class ContactApp extends Contacts {
         this.render();
         this.id = 1;
     }
-    //  id = 0;
     render() {
         const form = document.querySelector('form')
         form.addEventListener("submit", (event) => {
@@ -97,7 +96,29 @@ class ContactApp extends Contacts {
                 })
             super.add(this.contact)
             this.onAdd()
+            this.handleLocalStrogare()
         })
+    }
+
+    setCookie(name, value) {
+        let exp = new Date()
+        exp.setDate(exp.getDate() + 10)
+        document.cookie = `${name}=${value}; path=/; expires= ${exp}`
+    }
+
+    deleteCookie(name) {
+        setCookie(name, "", {
+            'max-age': -1
+        })
+    }
+
+    handleLocalStrogare() {
+        if (!this.data.length) {
+            return localStorage.removeItem('users')
+        }
+        localStorage.setItem('users', JSON.stringify(this.data))
+        this.setCookie('storageExpiration', 'true')
+        this.deleteCookie('storageExpiration')
     }
 
     onAdd() {
@@ -105,14 +126,14 @@ class ContactApp extends Contacts {
         const users = document.querySelector('.contacts__list')
         const list = document.createElement('div')
         list.className = 'user__item'
-        
+
 
         // console.log(this.contact, '=====this.contsct ')
         //console.log('his.contsct.name ', this.contact.name)
 
         const nameUser = document.createElement('span')
         nameUser.innerHTML = this.contact.name
-        nameUser.classList.add ('user__itemName', 'item')
+        nameUser.classList.add('user__itemName', 'item')
 
         const emailUser = document.createElement('span')
         emailUser.innerHTML = this.contact.email
@@ -152,58 +173,59 @@ class ContactApp extends Contacts {
             container.remove(this.id)
             super.remove(+container.id)
             console.log(super.remove(+container.id))
+            this.handleLocalStrogare()
         })
 
 
-            editButton.addEventListener("click", event => {
+        editButton.addEventListener("click", event => {
             const { target } = event
             const container = target.closest('.user__item')
 
-           const  elems = container.childNodes;
-           /* for (let elem of elems) {
-                console.log(elem.innerHTML);
-                
-            }*/
+            const elems = container.childNodes;
+            /* for (let elem of elems) {
+                 console.log(elem.innerHTML);
+                 
+             }*/
             let a;
-            
-            if (confirm('Change your name?') === true)
-            {
+
+            if (confirm('Change your name?') === true) {
                 a = prompt('New name')
-            if (a !== '') {
-                elems[0].textContent = a
-            }
+                if (a !== '') {
+                    elems[0].textContent = a
+                }
             }
 
-            if (confirm('Change your email?') === true)
-            {
+            if (confirm('Change your email?') === true) {
                 a = prompt('New email?')
                 if (a !== '') {
                     elems[1].textContent = a
                 }
             }
-            if (confirm('Change your adress?') === true)
-            {
+            if (confirm('Change your adress?') === true) {
                 a = prompt('New adress?')
-            if (a !== '') {
-                elems[2].textContent = a
-            }
+                if (a !== '') {
+                    elems[2].textContent = a
+                }
             }
 
-            if (confirm('Change your phone?') === true)
-            {
+            if (confirm('Change your phone?') === true) {
                 a = prompt('New phone?')
-            if (a !== '') {
-                elems[3].textContent = a
+                if (a !== '') {
+                    elems[3].textContent = a
+                }
             }
-            }       
             super.edit(+this.id, container)
+            this.handleLocalStrogare()
         })
 
     }
 }
 
-
-
+window.addEventListener("load", () => {
+    if (!document.cookie.includes("storageExpiration")) {
+        localStorage.removeItem("contacts");
+    }
+});
 
 const contactApp = new ContactApp();
 //contactApp.onAdd();
